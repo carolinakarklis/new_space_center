@@ -10,13 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_19_221313) do
+ActiveRecord::Schema.define(version: 2023_11_19_221842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "agencies", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "alien_ships", force: :cascade do |t|
+    t.integer "max_crew"
+    t.integer "abductions_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -42,6 +49,26 @@ ActiveRecord::Schema.define(version: 2023_11_19_221313) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["load_type_id"], name: "index_rockets_on_load_type_id"
+  end
+
+  create_table "space_buses", force: :cascade do |t|
+    t.integer "max_crew"
+    t.integer "fuel_days"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "space_travels", force: :cascade do |t|
+    t.datetime "start_at"
+    t.integer "duration_in_days"
+    t.bigint "planet_id"
+    t.bigint "space_vehicle_id"
+    t.text "mission_description"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["planet_id"], name: "index_space_travels_on_planet_id"
+    t.index ["space_vehicle_id"], name: "index_space_travels_on_space_vehicle_id"
   end
 
   create_table "space_vehicles", force: :cascade do |t|
