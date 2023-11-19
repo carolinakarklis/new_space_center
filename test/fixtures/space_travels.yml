@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start_at: 
+  duration_in_days: 
+  planet: 
+  space_vehicle: 
+  mission_description: 
+  status: 1
+
+two:
+  start_at: 
+  duration_in_days: 
+  planet: 
+  space_vehicle: 
+  mission_description: 
+  status: 1

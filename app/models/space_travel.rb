@@ -1,0 +1,2 @@
+class SpaceTravel < ApplicationRecord
+end
