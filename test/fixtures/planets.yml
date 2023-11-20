@@ -1,9 +1,0 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: MyString
-  km_from_earth: 1
-
-two:
-  name: MyString
-  km_from_earth: 1

@@ -1,9 +1,0 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  max_crew: 
-  fuel_days: 1
-
-two:
-  max_crew: 
-  fuel_days: 1
