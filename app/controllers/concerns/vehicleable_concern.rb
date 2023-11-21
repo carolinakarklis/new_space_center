@@ -7,6 +7,12 @@ module VehicleableConcern
     return create_alien_ship if space_vehicle_params[:alien_ship_attributes]
   end
 
+  def update_vehicleable
+    @vehicle.vehicleable.fuel_days = update_params[:fuel_days] if update_params[:fuel_days]
+
+    @vehicle.update(update_params.except(:fuel_days)) && @vehicle.vehicleable.save
+  end
+
   private
 
   def create_rocket

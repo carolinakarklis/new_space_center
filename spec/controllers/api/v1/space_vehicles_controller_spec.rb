@@ -4,11 +4,8 @@ module Api
   module V1
     RSpec.describe SpaceVehiclesController, type: :request do
       let!(:api_token) { create(:api_token) }
-
-      setup do
-        create(:space_vehicle)
-        create(:space_vehicle)
-      end
+      let!(:space_vehicle_a) {create(:space_vehicle) }
+      let!(:space_vehicle_b) {create(:space_vehicle) }
 
       context 'When credentials are invalid' do
         it 'returns Bad credentials' do
@@ -99,6 +96,26 @@ module Api
             expect(response.status).to eq(200)
             expect(SpaceVehicle.last.name).to eq alien_ship_params[:space_vehicle][:name]
             expect(AlienShip.last.max_crew).to eq alien_ship_params[:space_vehicle][:alien_ship_attributes][:max_crew]
+          end
+        end
+
+        describe 'PUT #update' do
+          let(:update_params) do
+            {
+              space_vehicle: {
+                name: 'New vehicle name',
+                km_per_hour: 1000,
+                fuel_days: 50
+              }
+            }
+          end
+
+          it 'updates vehicle' do
+            put api_v1_space_vehicle_path(space_vehicle_a), params: update_params, headers: { Authorization: "Bearer #{api_token.token}" }
+
+            expect(response.status).to eq(200)
+            expect(space_vehicle_a.reload.name).to eq update_params[:space_vehicle][:name]
+            expect(space_vehicle_a.vehicleable.reload.fuel_days).to eq update_params[:space_vehicle][:fuel_days]
           end
         end
       end
