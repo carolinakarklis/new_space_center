@@ -1,6 +1,9 @@
 class SpaceTravel < ApplicationRecord
   include AASM
 
+  belongs_to :planet
+  belongs_to :space_vehicle
+
   enum status: {
     scheduled: 0,
     started: 1,
