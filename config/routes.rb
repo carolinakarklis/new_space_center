@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       defaults format: :json do
         resources :space_vehicles, only: [:index, :create, :update]
+        resources :space_travels, only: [:index, :create, :update]
       end
     end
   end
