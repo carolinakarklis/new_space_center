@@ -16,6 +16,22 @@ class Api::V1::SpaceTravelsController < Api::V1::BaseController
   def update
   end
 
+  def fail
+    travel = SpaceTravel.find(params[:space_travel_id])
+
+    travel.fail
+
+    render json: SpaceTravelSerializer.new(travel).serializable_hash
+  end
+
+  def abort
+    travel = SpaceTravel.find(params[:space_travel_id])
+
+    travel.abort
+
+    render json: SpaceTravelSerializer.new(travel).serializable_hash
+  end
+
   private
 
   def space_travel_params

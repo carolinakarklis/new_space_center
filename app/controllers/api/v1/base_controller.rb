@@ -1,5 +1,6 @@
 class Api::V1::BaseController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
+  rescue_from AASM::InvalidTransition, with: :handle_invalid_transition
 
   before_action :authenticate
 
@@ -21,5 +22,9 @@ class Api::V1::BaseController < ActionController::Base
 
   def handle_not_found
     render json: { message: "Record not found" }, status: :not_found
+  end
+
+  def handle_invalid_transition
+    render json: { message: "Record can't transition for this status" }, status: 409
   end
 end

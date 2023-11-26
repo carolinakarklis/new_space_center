@@ -66,6 +66,64 @@ module Api
           end
         end
       end
+
+      describe 'POST #fail' do
+        context 'when travel has started status' do
+          setup do
+            space_travel.start!
+          end
+
+          it 'changes status to fail' do
+            post api_v1_space_travel_fail_path(space_travel), headers: { Authorization: "Bearer #{api_token.token}" }
+
+            parsed_body = JSON.parse(response.body)
+
+            expect(response.status).to eq(200)
+            expect(parsed_body["data"]["attributes"]["status"]).to eq("failed")
+          end
+        end
+
+        context 'when travel not allowed to fail' do
+          let!(:finished_travel) { create(:space_travel, status: :finished) }
+
+          it 'keeps current stage and returns error message' do
+            post api_v1_space_travel_fail_path(finished_travel), headers: { Authorization: "Bearer #{api_token.token}" }
+
+            parsed_body = JSON.parse(response.body)
+
+            expect(response.status).to eq(409)
+            expect(finished_travel).to_not allow_event :fail
+            expect(finished_travel.status).to eq 'finished'
+          end
+        end
+      end
+
+      describe 'POST #abort' do
+        context 'when travel has started or scheduled status' do
+          it 'changes status to aborted' do
+            post api_v1_space_travel_abort_path(space_travel), headers: { Authorization: "Bearer #{api_token.token}" }
+
+            parsed_body = JSON.parse(response.body)
+
+            expect(response.status).to eq(200)
+            expect(parsed_body["data"]["attributes"]["status"]).to eq("aborted")
+          end
+        end
+
+        context 'when travel not allowed to abort' do
+          let!(:finished_travel) { create(:space_travel, status: :finished) }
+
+          it 'keeps current status and return error message' do
+            post api_v1_space_travel_abort_path(finished_travel), headers: { Authorization: "Bearer #{api_token.token}" }
+
+            parsed_body = JSON.parse(response.body)
+
+            expect(response.status).to eq(409)
+            expect(finished_travel).to_not allow_event :abort
+            expect(finished_travel.status).to eq 'finished'
+          end
+        end
+      end
     end
   end
 end
