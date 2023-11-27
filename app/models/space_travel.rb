@@ -10,6 +10,8 @@ class SpaceTravel < ApplicationRecord
 
   before_validation :calculate_duration_in_days
 
+  scope :in_course_for_vehicle, ->(space_vehicle_id) { where(space_vehicle_id: space_vehicle_id, status: "started") }
+
   enum status: {
     scheduled: 0,
     started: 1,

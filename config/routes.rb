@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         resources :space_travels, only: [:index, :create, :update] do
           post 'fail', to: 'space_travels#fail'
           post 'abort', to: 'space_travels#abort'
+          post 'start', to: 'space_travels#start'
         end
       end
     end

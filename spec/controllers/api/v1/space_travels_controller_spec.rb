@@ -67,6 +67,26 @@ module Api
         end
       end
 
+      describe 'PUT #update' do
+        context 'when params are valid' do
+          let(:update_params) do
+            {
+              space_travel: {
+                start_at: DateTime.new(2024,1,10,5,0,0).to_s,
+                mission_description: 'Updated'
+              }
+            }
+          end
+
+          it 'updates the record' do
+            put api_v1_space_travel_path(space_travel), params: update_params, headers: { Authorization: "Bearer #{api_token.token}" }
+  
+              expect(response.status).to eq(200)
+              expect(space_travel.reload.mission_description).to eq update_params[:space_travel][:mission_description]
+          end
+        end
+      end
+
       describe 'POST #fail' do
         context 'when travel has started status' do
           setup do
@@ -122,6 +142,17 @@ module Api
             expect(finished_travel).to_not allow_event :abort
             expect(finished_travel.status).to eq 'finished'
           end
+        end
+      end
+
+      describe 'POST #start' do
+        it 'starts space travel' do
+          post api_v1_space_travel_start_path(space_travel), headers: { Authorization: "Bearer #{api_token.token}" }
+
+          parsed_body = JSON.parse(response.body)
+
+          expect(response.status).to eq(200)
+          expect(parsed_body["data"]["attributes"]["status"]).to eq("started")
         end
       end
     end

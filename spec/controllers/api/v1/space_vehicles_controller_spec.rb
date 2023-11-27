@@ -100,22 +100,42 @@ module Api
         end
 
         describe 'PUT #update' do
-          let(:update_params) do
-            {
-              space_vehicle: {
-                name: 'New vehicle name',
-                km_per_hour: 1000,
-                fuel_days: 50
+          context 'when params are valid' do
+            let(:update_params) do
+              {
+                space_vehicle: {
+                  name: 'New vehicle name',
+                  km_per_hour: 1000,
+                  fuel_days: 50
+                }
               }
-            }
+            end
+
+            it 'updates vehicle' do
+              put api_v1_space_vehicle_path(space_vehicle_a), params: update_params, headers: { Authorization: "Bearer #{api_token.token}" }
+
+              expect(response.status).to eq(200)
+              expect(space_vehicle_a.reload.name).to eq update_params[:space_vehicle][:name]
+              expect(space_vehicle_a.vehicleable.reload.fuel_days).to eq update_params[:space_vehicle][:fuel_days]
+            end
           end
 
-          it 'updates vehicle' do
-            put api_v1_space_vehicle_path(space_vehicle_a), params: update_params, headers: { Authorization: "Bearer #{api_token.token}" }
+          context 'when new fuel_days value is not enough for current travels' do
+            let!(:space_travel) { create(:space_travel, status: 'started') }
+            let(:fuel_params) do
+              {
+                space_vehicle: {
+                  fuel_days: 0
+                }
+              }
+            end
 
-            expect(response.status).to eq(200)
-            expect(space_vehicle_a.reload.name).to eq update_params[:space_vehicle][:name]
-            expect(space_vehicle_a.vehicleable.reload.fuel_days).to eq update_params[:space_vehicle][:fuel_days]
+            it 'syncs current travels and change status to fail' do
+              put api_v1_space_vehicle_path(space_travel.space_vehicle), params: fuel_params, headers: { Authorization: "Bearer #{api_token.token}" }
+
+              expect(response.status).to eq(200)
+              expect(space_travel.reload.status).to eq('failed')
+            end
           end
         end
       end

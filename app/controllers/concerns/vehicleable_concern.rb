@@ -8,7 +8,7 @@ module VehicleableConcern
   end
 
   def update_vehicleable
-    @vehicle.vehicleable.fuel_days = update_params[:fuel_days] if update_params[:fuel_days]
+    update_fuel if update_params[:fuel_days]
 
     @vehicle.update(update_params.except(:fuel_days)) && @vehicle.vehicleable.save
   end
@@ -40,5 +40,17 @@ module VehicleableConcern
       max_crew: space_vehicle_params[:alien_ship_attributes][:max_crew],
       abductions_number: space_vehicle_params[:alien_ship_attributes][:abductions_number]
     )
+  end
+
+  def update_fuel
+    @vehicle.vehicleable.fuel_days = update_params[:fuel_days]
+
+    travels = SpaceTravel.in_course_for_vehicle(@vehicle.id)
+
+    travels.each do |travel|
+      next if @vehicle.vehicleable.fuel_days >= travel.duration_in_days
+
+      travel.fail!
+    end
   end
 end
