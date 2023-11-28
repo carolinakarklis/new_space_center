@@ -1,10 +1,14 @@
 class Api::V1::SpaceVehiclesController < Api::V1::BaseController
   include VehicleableConcern
 
-  before_action :set_vehicle, only: :update
+  before_action :set_vehicle, only: [:update, :show]
 
   def index
     render json: SpaceVehicleSerializer.new(SpaceVehicle.all).serializable_hash
+  end
+
+  def show
+    render json: SpaceVehicleSerializer.new(@vehicle).serializable_hash
   end
 
   def create
@@ -51,5 +55,4 @@ class Api::V1::SpaceVehiclesController < Api::V1::BaseController
   def sliced_params
     space_vehicle_params.slice(:name, :agency_id, :km_per_hour)
   end
-
 end

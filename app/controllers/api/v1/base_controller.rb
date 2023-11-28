@@ -2,6 +2,8 @@ class Api::V1::BaseController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
   rescue_from AASM::InvalidTransition, with: :handle_invalid_transition
 
+  skip_forgery_protection
+
   before_action :authenticate
 
   private

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       defaults format: :json do
-        resources :space_vehicles, only: [:index, :create, :update]
+        resources :space_vehicles, only: [:index, :create, :update, :show]
         resources :space_travels, only: [:index, :create, :update] do
           post 'fail', to: 'space_travels#fail'
           post 'abort', to: 'space_travels#abort'
