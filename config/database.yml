@@ -81,5 +81,6 @@ test:
 production:
   <<: *default
   database: new_space_center_production
+  url: <%= ENV['DATABASE_URL'] %>
   username: new_space_center
   password: <%= ENV['NEW_SPACE_CENTER_DATABASE_PASSWORD'] %>
