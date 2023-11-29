@@ -25,3 +25,4 @@ Nesse desafio, priorizei a qualidade e funcionalidade de todos endpoints e regra
 * Implementaria o `Documentável`/`Visualizável` utilizando o active storage.
 * Melhoraria a segurança do token enviado na gem [space_register](https://github.com/carolinakarklis/space_register), utilizando uma env var.
 * Adicionaria mais cenários de testes com diferentes possibilidades de erro, e incluiria testes de integração na gem citada.
+* Todas as regras do status da viagem estão funcionando igual os requisitos, é possível iniciar, abortar e falhar a viagem. Faltou agendar a viagem via Sidekiq, é algo que eu faria também com mais tempo.
